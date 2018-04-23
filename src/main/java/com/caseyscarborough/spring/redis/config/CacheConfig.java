@@ -13,6 +13,9 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableCaching
@@ -27,6 +30,11 @@ public class CacheConfig extends CachingConfigurerSupport {
   @Value("${redis.port}")
   private int port;
 
+  @Value("${redis.expiration.timeout}")
+  private int expirationTimeout;
+
+  public static final String CACHE_NAME = "test1";
+
   @Bean
   public JedisConnectionFactory redisConnectionFactory() {
     JedisConnectionFactory redisConnectionFactory = new JedisConnectionFactory();
@@ -39,13 +47,16 @@ public class CacheConfig extends CachingConfigurerSupport {
   public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory cf) {
     RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
     redisTemplate.setConnectionFactory(cf);
+    redisTemplate.setKeySerializer(new StringRedisSerializer());
+    redisTemplate.setValueSerializer(new JsonRedisSerializer());
     return redisTemplate;
   }
 
   @Bean
   public CacheManager cacheManager(RedisTemplate redisTemplate) {
     RedisCacheManager cacheManager = new RedisCacheManager(redisTemplate);
-    cacheManager.setDefaultExpiration(300);
+    cacheManager.setDefaultExpiration(expirationTimeout);
+    cacheManager.setCacheNames(Arrays.asList(CACHE_NAME));
     return cacheManager;
   }
 

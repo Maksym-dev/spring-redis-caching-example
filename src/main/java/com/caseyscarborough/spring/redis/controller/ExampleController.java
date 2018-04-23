@@ -1,4 +1,4 @@
-package com.caseyscarborough.spring.redis;
+package com.caseyscarborough.spring.redis.controller;
 
 import org.apache.log4j.Logger;
 import org.springframework.cache.annotation.Cacheable;

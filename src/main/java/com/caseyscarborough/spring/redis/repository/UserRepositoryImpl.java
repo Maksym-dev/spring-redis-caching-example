@@ -1,5 +1,6 @@
-package com.caseyscarborough.spring.redis;
+package com.caseyscarborough.spring.redis.repository;
 
+import com.caseyscarborough.spring.redis.domain.User;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 

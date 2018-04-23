@@ -14,8 +14,6 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import java.lang.reflect.Method;
-
 @Configuration
 @EnableCaching
 @PropertySource("classpath:redis.properties")
@@ -39,7 +37,7 @@ public class CacheConfig extends CachingConfigurerSupport {
 
   @Bean
   public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory cf) {
-    RedisTemplate<String, String> redisTemplate = new RedisTemplate<String, String>();
+    RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
     redisTemplate.setConnectionFactory(cf);
     return redisTemplate;
   }
@@ -53,17 +51,14 @@ public class CacheConfig extends CachingConfigurerSupport {
 
   @Bean
   public KeyGenerator customKeyGenerator() {
-    return new KeyGenerator() {
-      @Override
-      public Object generate(Object o, Method method, Object... objects) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(o.getClass().getName());
-        sb.append(method.getName());
-        for (Object obj : objects) {
-          sb.append(obj.toString());
-        }
-        return sb.toString();
+    return (o, method, objects) -> {
+      StringBuilder sb = new StringBuilder();
+      sb.append(o.getClass().getName());
+      sb.append(method.getName());
+      for (Object obj : objects) {
+        sb.append(obj.toString());
       }
+      return sb.toString();
     };
   }
 

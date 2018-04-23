@@ -1,4 +1,4 @@
-package com.caseyscarborough.spring.redis;
+package com.caseyscarborough.spring.redis.domain;
 
 import java.io.Serializable;
 

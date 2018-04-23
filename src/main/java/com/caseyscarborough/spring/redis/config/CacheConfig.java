@@ -1,12 +1,14 @@
 package com.caseyscarborough.spring.redis.config;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -16,15 +18,22 @@ import java.lang.reflect.Method;
 
 @Configuration
 @EnableCaching
+@PropertySource("classpath:redis.properties")
 public class CacheConfig extends CachingConfigurerSupport {
 
   private static final Logger log = Logger.getLogger(CacheConfig.class);
 
+  @Value("${redis.host}")
+  private String host;
+
+  @Value("${redis.port}")
+  private int port;
+
   @Bean
   public JedisConnectionFactory redisConnectionFactory() {
     JedisConnectionFactory redisConnectionFactory = new JedisConnectionFactory();
-    redisConnectionFactory.setHostName("127.0.0.1");
-    redisConnectionFactory.setPort(6379);
+    redisConnectionFactory.setHostName(host);
+    redisConnectionFactory.setPort(port);
     return redisConnectionFactory;
   }
 

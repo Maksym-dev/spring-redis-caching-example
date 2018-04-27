@@ -10,4 +10,12 @@ The application can be run by executing the following:
 mvn clean jetty:run
 ```
 
+or
+
+```bash
+mvnDebug clean jetty:run
+```
+
+in debug mode on port 8000.
+
 Then navigate to [localhost:8080](http://localhost:8080) in your browser.
